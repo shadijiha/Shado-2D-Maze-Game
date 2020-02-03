@@ -49,6 +49,37 @@ public class Vertex implements Cloneable {
 		return Math.sqrt(Math.pow(v.x - this.x, 2) + Math.pow(v.y - this.y, 2) + Math.pow(v.z - this.z, 2));
 	}
 
+	/**
+	 * Returns if 2 vertex have same x and y
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || o.getClass() != this.getClass()) {
+			return false;
+		} else {
+			Vertex v = (Vertex) o;
+			return v.x == this.x && v.y == this.y;
+		}
+	}
+
+	/**
+	 * To string method
+	 */
+	@Override
+	public String toString() {
+		return String.format("(%.0f, %.0f)", x, y);
+	}
+
+	/**
+	 * Generates a vertex with random x and y
+	 * 
+	 * @param max The maximum value a x or y can take
+	 * @return Returns the random vertex
+	 */
+	public static Vertex random(int max) {
+		return new Vertex((int) (Math.random() * max), (int) (Math.random() * max));
+	}
+
 	// Setters
 
 	/***

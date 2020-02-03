@@ -6,26 +6,24 @@ package ShadoLogger;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-public class Logger {
+public class Logger implements AutoCloseable {
 	private int level;
 	public static final int LOG_LEVEL_ERROR = 0;
 	public static final int LOG_LEVEL_WARNNING = 1;
 	public static final int LOG_LEVEL_INFO = 2;
+	private boolean debugMode;
 
-	//private List<String> buffer = new ArrayList<String>();
+	// private List<String> buffer = new ArrayList<String>();
 	private BufferedWriter buffer;
 
 	public Logger(int _level, boolean overwriteFile) {
 		if (_level < 0 || _level > 2)
 			_level = 0;
 		level = _level;
+		debugMode = true;
 
 		try {
 			buffer = new BufferedWriter(new FileWriter("log.txt", !overwriteFile));
@@ -41,6 +39,20 @@ public class Logger {
 
 	public Logger() {
 		this(LOG_LEVEL_ERROR, false);
+	}
+
+	// Turn debug mode on or off
+	public void toggleDebugMode() {
+		debugMode = !debugMode;
+	}
+
+	public void setDebugModeTo(boolean b) {
+		debugMode = b;
+	}
+
+	// Getter
+	public boolean debugMode() {
+		return debugMode;
 	}
 
 	// Error
@@ -65,6 +77,7 @@ public class Logger {
 	}
 
 	// Other methodes
+	@Override
 	public void close() {
 		try {
 			buffer.close();
@@ -84,6 +97,10 @@ public class Logger {
 
 	private void formatMessage(Exception e, String label) {
 
+		// if debug mode if off exit
+		if (!debugMode)
+			return;
+
 		// Get Date and format it
 		DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
@@ -96,12 +113,14 @@ public class Logger {
 
 		try {
 			// Format message and write it to file
-			msg = String.format("[%s]:\t%s\t--> %s\t@%s::%s()@Line#%s\n", date.format(now), label, msg, l.getClassName(), l.getMethodName(), l.getLineNumber());
+			msg = String.format("[%s]:\t%s\t--> %s\t@%s::%s()@Line#%s\n", date.format(now), label, msg,
+					l.getClassName(), l.getMethodName(), l.getLineNumber());
 			buffer.append(msg);
 
 		} catch (Exception err) {
 			// If cannot write to file print error to console
-			msg = String.format("[%s]:\t%s\t--> %s\t@%s::%s()@Line#%s\n", date.format(now), label, err.getMessage(), l.getClassName(), l.getMethodName(), l.getLineNumber());
+			msg = String.format("[%s]:\t%s\t--> %s\t@%s::%s()@Line#%s\n", date.format(now), label, err.getMessage(),
+					l.getClassName(), l.getMethodName(), l.getLineNumber());
 			System.out.println(msg);
 		}
 	}

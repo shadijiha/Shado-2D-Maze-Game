@@ -5,20 +5,17 @@
 
 package driver;
 
-import ShadoMath.Vector;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import PremetiveShapes.*;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.Timer;
 
-import static ShadoMath.Util.random;
-import static ShadoMath.Util.randomColor;
+import PremetiveShapes.Shado;
 
 public class DrawingComponent extends JComponent implements ActionListener {
 
@@ -41,22 +38,40 @@ public class DrawingComponent extends JComponent implements ActionListener {
 
 	// This is the renderer (Only draw). You also can put logic here (collision,
 	// forces, etc)
+	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 
 		/***************************
 		 * ****** DRAW STUFF********
 		 ***************************/
+		if (!HAS_INIT) {
+			Game.generateGrid(this.parentWindow);
+			HAS_INIT = true;
+		}
 
+		Game.grid.parallelStream().forEachOrdered(e -> {
+			e.parallelStream().forEachOrdered(grid -> {
+				grid.draw(g2);
+
+				if (Main.LOGGER.debugMode()) {
+					new Shado.Text(grid.getIndex().toString(),
+							grid.getIndex().x * grid.getDimension() + grid.getDimension() / 2,
+							grid.getIndex().y * grid.getDimension() + grid.getDimension() / 2).draw(g2);
+
+				}
+			});
+		});
 
 		// Timer
 		tm.start();
 
 		// Calculate real FPS
-		/*long time2 = new Date().getTime();
-		this.deltaTime = time2 - time1;
-		this.parentWindow.setTitle(Long.toString((long) 1000 / deltaTime) + " frames per second");
-		time1 = new Date().getTime();*/
+		/*
+		 * long time2 = new Date().getTime(); this.deltaTime = time2 - time1;
+		 * this.parentWindow.setTitle(Long.toString((long) 1000 / deltaTime) +
+		 * " frames per second"); time1 = new Date().getTime();
+		 */
 	}
 
 	// Here YOU CAN perform logic (add forces/velocity, check collision, etc)
