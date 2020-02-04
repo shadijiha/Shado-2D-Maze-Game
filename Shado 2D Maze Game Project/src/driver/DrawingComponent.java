@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Date;
 
 import javax.swing.JComponent;
@@ -17,7 +19,7 @@ import javax.swing.Timer;
 
 import PremetiveShapes.Shado;
 
-public class DrawingComponent extends JComponent implements ActionListener {
+public class DrawingComponent extends JComponent implements ActionListener, KeyListener {
 
 	/**
 	 *
@@ -34,6 +36,8 @@ public class DrawingComponent extends JComponent implements ActionListener {
 	// Constructor
 	DrawingComponent(JFrame window) {
 		this.parentWindow = window;
+		setFocusable(true);
+		addKeyListener(this);
 	}
 
 	// This is the renderer (Only draw). You also can put logic here (collision,
@@ -58,10 +62,12 @@ public class DrawingComponent extends JComponent implements ActionListener {
 					new Shado.Text(grid.getIndex().toString(),
 							grid.getIndex().x * grid.getDimension() + grid.getDimension() / 2,
 							grid.getIndex().y * grid.getDimension() + grid.getDimension() / 2).draw(g2);
-
 				}
 			});
 		});
+
+		// Draw player
+		Game.player.draw(g2);
 
 		// Timer
 		tm.start();
@@ -78,5 +84,33 @@ public class DrawingComponent extends JComponent implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			Game.player.moveBy(1, 0);
+		} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
+			Game.player.moveBy(-1, 0);
+		} else if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+			Game.player.moveBy(0, -1);
+		} else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
+			Game.player.moveBy(0, 1);
+		}
+
+		repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }

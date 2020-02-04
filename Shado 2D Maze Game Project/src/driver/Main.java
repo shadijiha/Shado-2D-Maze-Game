@@ -24,6 +24,7 @@ public abstract class Main {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				LOGGER.setDebugModeTo(false);
 				// All the application goes here
 				JFrame mainWindow = new JFrame("Shado Mario Java");
 				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +36,6 @@ public abstract class Main {
 				mainWindow.pack();
 				mainWindow.setLocationRelativeTo(null);
 				mainWindow.setVisible(true);
-
 			}
 		});
 
