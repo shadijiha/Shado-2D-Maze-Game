@@ -38,10 +38,5 @@ public abstract class Main {
 				mainWindow.setVisible(true);
 			}
 		});
-
-		// Need to have this for some reason
-		LOGGER.error(new Exception("Test"));
-
 	}
-
 }
