@@ -30,7 +30,7 @@ public class Grid extends GameObject {
 		super("grid");
 		this.index = index;
 		this.isEdge = isEdge;
-		this.dimensions = new float[] { dimension, dimension };
+		this.dimensions = new Shado.Dimension<Float>(dimension, dimension);
 		this.rect = new Shado.Rectangle(index.x * dimension, index.y * dimension, dimension, dimension);
 
 		if (isEdge)
@@ -95,7 +95,8 @@ public class Grid extends GameObject {
 	 */
 	public void setIndex(Vertex index) {
 		this.index = index;
-		this.rect = new Shado.Rectangle(index.x * dimensions[0], index.y * dimensions[1], dimensions[0], dimensions[1]);
+		this.rect = new Shado.Rectangle(index.x * dimensions.width, index.y * dimensions.height, dimensions.width,
+				dimensions.height);
 	}
 
 	/**

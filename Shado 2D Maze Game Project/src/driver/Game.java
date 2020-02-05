@@ -17,7 +17,7 @@ import gameObjects.Grid;
 import gameObjects.Monster;
 import gameObjects.Player;
 
-public class Game {
+public abstract class Game {
 
 	protected static Player player = new Player("IG");
 
@@ -27,7 +27,7 @@ public class Game {
 	 * 
 	 */
 	protected Game() {
-		// TODO Auto-generated constructor stub
+		// Nothing
 	}
 
 	public static void shootAllMonsters() {

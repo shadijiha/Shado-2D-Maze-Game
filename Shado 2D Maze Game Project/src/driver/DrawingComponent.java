@@ -62,8 +62,8 @@ public class DrawingComponent extends JComponent implements ActionListener, KeyL
 
 				if (Main.LOGGER.debugMode()) {
 					new Shado.Text(grid.getIndex().toString(),
-							grid.getIndex().x * grid.getDimensions()[0] + grid.getDimensions()[0] / 2,
-							grid.getIndex().y * grid.getDimensions()[0] + grid.getDimensions()[0] / 2).draw(g2);
+							grid.getIndex().x * grid.getDimensions().width + grid.getDimensions().height / 2,
+							grid.getIndex().y * grid.getDimensions().width + grid.getDimensions().height / 2).draw(g2);
 				}
 			});
 		});

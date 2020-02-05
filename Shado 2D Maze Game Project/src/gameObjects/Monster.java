@@ -47,10 +47,10 @@ public class Monster extends GameObject {
 	 * @param g
 	 * @param position
 	 */
-	public void draw(Graphics2D graphics, float[] dimensions) {
+	public void draw(Graphics2D graphics, Shado.Dimension<Float> dimensions) {
 		this.dimensions = dimensions;
-		new Shado.Circle(positionIndex.x * this.dimensions[0], positionIndex.y * this.dimensions[1], dimensions[0] / 2)
-				.setFill(Color.RED).draw(graphics);
+		new Shado.Circle(positionIndex.x * this.dimensions.width, positionIndex.y * this.dimensions.height,
+				dimensions.width / 2).setFill(Color.RED).draw(graphics);
 	}
 
 	/**

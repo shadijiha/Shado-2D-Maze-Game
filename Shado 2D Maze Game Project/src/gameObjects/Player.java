@@ -6,7 +6,6 @@
 package gameObjects;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import PremetiveShapes.Shado;
@@ -18,7 +17,7 @@ public class Player extends GameObject {
 	private String name;
 	private Vertex gridPosition;
 
-	private int hp = 1000; // Current health
+	private int hp = 1200; // Current health
 	private int maxHp = 1000; // Max health
 	private int hpRegen = 5; // Health regeneration per second
 	private int armor = 12; // Player's armor (ability to resist to damage)
@@ -34,11 +33,23 @@ public class Player extends GameObject {
 	}
 
 	public void draw(Graphics2D g, Grid where) {
+		// DRAW THE PLAYER
 		// Get the grid dimensions where player is
-		this.dimensions[0] = where.getDimensions()[0];
-		this.dimensions[1] = where.getDimensions()[1];
-		new Shado.Circle(gridPosition.x * dimensions[0], gridPosition.y * dimensions[1], dimensions[0] / 2)
-				.setFill(Color.BLUE).draw(g);
+		this.dimensions.width = where.getDimensions().width;
+		this.dimensions.height = where.getDimensions().height;
+		final var shape = new Shado.Circle(gridPosition.x * dimensions.width, gridPosition.y * dimensions.height,
+				dimensions.width / 2).setFill(Color.BLUE);
+		shape.draw(g);
+
+		// DRAW THE HP BAR
+		var barsPosition = new Vertex(shape.getX(), shape.getY());
+		barsPosition.y -= dimensions.width / 2;
+
+		var hpBars = renderHealthBar(barsPosition,
+				new Shado.Dimension<Float>(dimensions.width, dimensions.height * 0.40f));
+		for (Shado.Rectangle bar : hpBars) {
+			bar.draw(g);
+		}
 	}
 
 	/**
@@ -121,14 +132,15 @@ public class Player extends GameObject {
 	 * @param the   desired dimensions of the health bar
 	 * @return Returns an array of the produces Rectangles
 	 */
-	public Shado.Rectangle[] renderHealthBar(Vertex place, Dimension d) {
+	public Shado.Rectangle[] renderHealthBar(Vertex place, Shado.Dimension<Float> d) {
 
 		// Calculate the relative health
-		float percentage = hp / maxHp;
+		double percentage = (double) hp / (double) maxHp;
+		percentage = percentage > 1 ? 1 : percentage;
 
 		var mainRect = new Shado.Rectangle(place.x, place.y, d.width, d.height).setFill(Color.WHITE);
-		var coloredBar = new Shado.Rectangle(place.x, place.y, mainRect.getWidth() * percentage,
-				mainRect.getHeight() * percentage).setFill(Color.GREEN);
+		var coloredBar = new Shado.Rectangle(place.x, place.y, mainRect.getWidth() * percentage, mainRect.getHeight())
+				.setFill(Color.GREEN);
 
 		return new Shado.Rectangle[] { mainRect, coloredBar };
 	}

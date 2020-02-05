@@ -7,6 +7,7 @@ package gameObjects;
 import java.util.ArrayList;
 import java.util.List;
 
+import PremetiveShapes.Shado;
 import ShadoMath.Vertex;
 
 public abstract class GameObject {
@@ -14,7 +15,7 @@ public abstract class GameObject {
 	protected String objectName;
 	protected long id;
 	protected static List<GameObject> allObjects = new ArrayList<GameObject>();
-	protected float[] dimensions;
+	protected Shado.Dimension<Float> dimensions;
 
 	/**
 	 * 
@@ -22,7 +23,7 @@ public abstract class GameObject {
 	protected GameObject(String objectName) {
 		this.objectName = objectName;
 		id = (long) (Math.random() * 1e9);
-		this.dimensions = new float[2];
+		this.dimensions = new Shado.Dimension<Float>();
 
 		// Add to all objects
 		allObjects.add(this);
@@ -50,8 +51,8 @@ public abstract class GameObject {
 	/**
 	 * @return Returns the dimensions of the calling object
 	 */
-	public float[] getDimensions() {
-		return this.dimensions;
+	public Shado.Dimension<Float> getDimensions() {
+		return new Shado.Dimension<Float>(this.dimensions);
 	}
 
 	/**

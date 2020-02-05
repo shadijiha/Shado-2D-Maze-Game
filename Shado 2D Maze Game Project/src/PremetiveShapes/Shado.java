@@ -4,13 +4,16 @@
 
 package PremetiveShapes;
 
-import ShadoMath.Vector;
-import ShadoMath.Vertex;
-
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+
+import ShadoMath.Vector;
+import ShadoMath.Vertex;
 
 public abstract class Shado {
 
@@ -74,7 +77,7 @@ public abstract class Shado {
 		}
 
 		public double getHeight() {
-			return this.rectangle.width;
+			return this.rectangle.height;
 		}
 
 		// Setters
@@ -208,7 +211,8 @@ public abstract class Shado {
 		// Setters
 
 		/***
-		 *  Changes the fill Color of the calling object
+		 * Changes the fill Color of the calling object
+		 * 
 		 * @param c The new color
 		 * @return Returns the calling object with the changes
 		 */
@@ -219,6 +223,7 @@ public abstract class Shado {
 
 		/***
 		 * Changes the line stroke weight (line width)
+		 * 
 		 * @param newStrokeWeight The new stroke weight
 		 * @return Returns the calling object with the changes
 		 */
@@ -313,6 +318,41 @@ public abstract class Shado {
 
 		public String getText() {
 			return this.text;
+		}
+	}
+
+	public static class Dimension<T extends Number> {
+		public T width;
+		public T height;
+
+		public Dimension(T _width, T _height) {
+			width = _width;
+			height = _height;
+		}
+
+		public Dimension(final Dimension<T> other) {
+			this(other.width, other.height);
+		}
+
+		public Dimension() {
+			width = null;
+			height = null;
+		}
+
+		public Dimension<Integer> round() {
+			return new Dimension<Integer>(Math.round((float) width), Math.round((float) height));
+		}
+
+		public Dimension<Integer> toInteger() {
+			return round();
+		}
+
+		public Dimension<Double> toDouble() {
+			return new Dimension<Double>((double) width, (double) height);
+		}
+
+		public Dimension<Float> toFloat() {
+			return new Dimension<Float>((float) width, (float) height);
 		}
 	}
 

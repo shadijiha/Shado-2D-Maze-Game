@@ -33,9 +33,10 @@ public class Bullet extends GameObject {
 		this.velocity = velocity;
 
 		Vertex initPos = source.getIndeces();
-		float[] d = source.getDimensions();
-		this.positionXY = new Vertex(initPos.x * d[0], initPos.y * d[1]);
-		this.shape = new Shado.Rectangle(positionXY.x, positionXY.y, d[0] * 0.40, d[1] * 0.40).setFill(Color.ORANGE);
+		var d = source.getDimensions();
+		this.positionXY = new Vertex(initPos.x * d.width, initPos.y * d.height);
+		this.shape = new Shado.Rectangle(positionXY.x, positionXY.y, d.width * 0.40, d.height * 0.40)
+				.setFill(Color.ORANGE);
 
 		allBullets.add(this);
 	}

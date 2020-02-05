@@ -1,5 +1,7 @@
 package ShadoMath;
 
+import java.util.function.Consumer;
+
 public class Vertex implements Cloneable {
 
 	public double x;
@@ -78,6 +80,12 @@ public class Vertex implements Cloneable {
 	 */
 	public static Vertex random(int max) {
 		return new Vertex((int) (Math.random() * max), (int) (Math.random() * max));
+	}
+
+	public Object transform(Consumer<Vertex> func) {
+		// TODO Auto-generated method stub
+		func.accept(this);
+		return this;
 	}
 
 	// Setters
