@@ -33,11 +33,12 @@ public class Player extends GameObject {
 		gridPosition = new Vertex(1, 1);
 	}
 
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, Grid where) {
 		// Get the grid dimensions where player is
-		Grid where = Game.grid.get((int) gridPosition.y).get((int) gridPosition.x);
-		new Shado.Circle(gridPosition.x * where.getDimension(), gridPosition.y * where.getDimension(),
-				where.getDimension() / 2).setFill(Color.BLUE).draw(g);
+		this.dimensions[0] = where.getDimensions()[0];
+		this.dimensions[1] = where.getDimensions()[1];
+		new Shado.Circle(gridPosition.x * dimensions[0], gridPosition.y * dimensions[1], dimensions[0] / 2)
+				.setFill(Color.BLUE).draw(g);
 	}
 
 	/**
@@ -140,6 +141,15 @@ public class Player extends GameObject {
 	}
 
 	public Vertex getGridPosition() {
+		return new Vertex(gridPosition);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public Vertex getIndeces() {
+		// TODO Auto-generated method stub
 		return new Vertex(gridPosition);
 	}
 }

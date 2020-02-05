@@ -7,8 +7,11 @@ package gameObjects;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import PremetiveShapes.Shado;
+import ShadoMath.Vector;
 import ShadoMath.Vertex;
 
 public class Monster extends GameObject {
@@ -18,17 +21,24 @@ public class Monster extends GameObject {
 	private int hpRegen;// Health regeneration per second
 	private int armor; // Monster's armor (ability to resist to damage)
 	private int ad; // Monster's attack damage
+	private Vector dir;
+	private Vertex positionIndex;
+	public static List<Monster> allMonsters = new ArrayList<>();
 
 	/**
 	 * 
 	 */
-	public Monster(int maxHp, int hpRegen, int armor, int ad) {
+	public Monster(int maxHp, int hpRegen, int armor, int ad, Vertex v, Vector dir) {
 		super("monster");
 		this.hp = maxHp;
 		this.maxHp = maxHp;
 		this.hpRegen = hpRegen;
 		this.armor = armor;
 		this.ad = ad;
+		this.dir = new Vector(dir);
+		this.positionIndex = new Vertex(v);
+
+		Monster.allMonsters.add(this);
 	}
 
 	/**
@@ -37,8 +47,10 @@ public class Monster extends GameObject {
 	 * @param g
 	 * @param position
 	 */
-	public void draw(Graphics2D graphics, Vertex position, double radius) {
-		new Shado.Circle(position.x, position.y, radius).setFill(Color.RED).draw(graphics);
+	public void draw(Graphics2D graphics, float[] dimensions) {
+		this.dimensions = dimensions;
+		new Shado.Circle(positionIndex.x * this.dimensions[0], positionIndex.y * this.dimensions[1], dimensions[0] / 2)
+				.setFill(Color.RED).draw(graphics);
 	}
 
 	/**
@@ -58,6 +70,11 @@ public class Monster extends GameObject {
 	 */
 	public void regenerateHealth() {
 		this.hp += this.hpRegen;
+	}
+
+	public void shoot() {
+		// Add bullet to Bullet.allBullets global List
+		new Bullet(60, this, this.dir);
 	}
 
 	/**
@@ -80,6 +97,12 @@ public class Monster extends GameObject {
 		return new Shado.Rectangle[] { mainRect, coloredBar };
 	}
 
+	@Override
+	public Vertex getIndeces() {
+		// TODO Auto-generated method stub
+		return new Vertex(positionIndex);
+	}
+
 	// Monster builder
 	public static class MonsterBuilder {
 		// Attributes
@@ -88,6 +111,8 @@ public class Monster extends GameObject {
 		private int hpRegen;
 		private int armor;
 		private int ad;
+		private Vector dir;
+		private Vertex positionIndex;
 
 		public MonsterBuilder() {
 			hp = 1000;
@@ -118,8 +143,18 @@ public class Monster extends GameObject {
 			return this;
 		}
 
+		public MonsterBuilder setPositionIndex(Vertex v) {
+			positionIndex = new Vertex(v);
+			return this;
+		}
+
+		public MonsterBuilder setDir(Vector dir) {
+			this.dir = new Vector(dir);
+			return this;
+		}
+
 		public Monster build() {
-			return new Monster(maxHp, hpRegen, armor, ad);
+			return new Monster(maxHp, hpRegen, armor, ad, positionIndex, dir);
 		}
 	}
 

@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import PremetiveShapes.Shado;
+import gameObjects.Grid;
 
 public class DrawingComponent extends JComponent implements ActionListener, KeyListener {
 
@@ -32,6 +33,7 @@ public class DrawingComponent extends JComponent implements ActionListener, KeyL
 	private Timer tm = new Timer(1000 / FPS, this);
 	private long deltaTime;
 	private long time1 = new Date().getTime();
+	private long totalFrames = 0;
 
 	// Constructor
 	DrawingComponent(JFrame window) {
@@ -60,17 +62,31 @@ public class DrawingComponent extends JComponent implements ActionListener, KeyL
 
 				if (Main.LOGGER.debugMode()) {
 					new Shado.Text(grid.getIndex().toString(),
-							grid.getIndex().x * grid.getDimension() + grid.getDimension() / 2,
-							grid.getIndex().y * grid.getDimension() + grid.getDimension() / 2).draw(g2);
+							grid.getIndex().x * grid.getDimensions()[0] + grid.getDimensions()[0] / 2,
+							grid.getIndex().y * grid.getDimensions()[0] + grid.getDimensions()[0] / 2).draw(g2);
 				}
 			});
 		});
 
 		// Draw player
-		Game.player.draw(g2);
+		Grid playerLocation = Game.grid.get((int) Game.player.getIndeces().y).get((int) Game.player.getIndeces().x);
+		Game.player.draw(g2, playerLocation);
+
+		// Make the monsters shoot every 90 frames
+		if (totalFrames % 90 == 0) {
+			Game.shootAllMonsters();
+		}
+
+		// Update all bullets
+		Game.updateAndDrawAllBullets(g2);
 
 		// Timer
 		tm.start();
+
+		if (totalFrames >= Long.MAX_VALUE) {
+			totalFrames = 0;
+		}
+		totalFrames++;
 
 		// Calculate real FPS
 		/*

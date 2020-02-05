@@ -10,51 +10,54 @@ import java.util.List;
 import ShadoMath.Vertex;
 
 public abstract class GameObject {
-	
+
 	protected String objectName;
 	protected long id;
-	protected int x;
-	protected int y;
 	protected static List<GameObject> allObjects = new ArrayList<GameObject>();
+	protected float[] dimensions;
 
 	/**
 	 * 
 	 */
 	protected GameObject(String objectName) {
 		this.objectName = objectName;
-		id = (long)(Math.random() * 1e9);
-		x = 0;
-		y = 0;
-		
+		id = (long) (Math.random() * 1e9);
+		this.dimensions = new float[2];
+
 		// Add to all objects
 		allObjects.add(this);
 	}
-	
+
 	/**
-	 * @return The x and y position of the calling object
+	 * @return Thie position index of the calling object on the grid
 	 */
-	public Vertex getCoordinates()	{
-		return new Vertex(this.x, this.y);
-	}
-	
+	public abstract Vertex getIndeces();
+
 	/**
 	 * @return The id of the calling object
 	 */
-	public long getId()	{
+	public long getId() {
 		return id;
 	}
-	
+
 	/**
 	 * @return The name of the calling Object
 	 */
-	public String getObjectName()	{
+	public String getObjectName() {
 		return objectName;
 	}
-	
+
+	/**
+	 * @return Returns the dimensions of the calling object
+	 */
+	public float[] getDimensions() {
+		return this.dimensions;
+	}
+
 	/**
 	 * @return Returns all the game objects created
 	 */
-	public static List<GameObject> getAllObjects()	{
+	public static List<GameObject> getAllObjects() {
 		return allObjects;
 	}
 }

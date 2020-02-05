@@ -18,7 +18,6 @@ public class Grid extends GameObject {
 	private GameObject item;
 	private Player player;
 	private Vertex index;
-	private float dimension;
 	private Shado.Rectangle rect;
 
 	private static Color defaultFill = Color.WHITE;
@@ -31,7 +30,7 @@ public class Grid extends GameObject {
 		super("grid");
 		this.index = index;
 		this.isEdge = isEdge;
-		this.dimension = dimension;
+		this.dimensions = new float[] { dimension, dimension };
 		this.rect = new Shado.Rectangle(index.x * dimension, index.y * dimension, dimension, dimension);
 
 		if (isEdge)
@@ -55,7 +54,7 @@ public class Grid extends GameObject {
 
 		// if the grid has a monster draw it
 		if (hasMonster()) {
-			monster.draw(graphics, new Vertex(index.x * dimension, index.y * dimension), dimension / 2);
+			monster.draw(graphics, this.dimensions);
 		}
 	}
 
@@ -96,7 +95,7 @@ public class Grid extends GameObject {
 	 */
 	public void setIndex(Vertex index) {
 		this.index = index;
-		this.rect = new Shado.Rectangle(index.x * dimension, index.y * dimension, dimension, dimension);
+		this.rect = new Shado.Rectangle(index.x * dimensions[0], index.y * dimensions[1], dimensions[0], dimensions[1]);
 	}
 
 	/**
@@ -155,11 +154,9 @@ public class Grid extends GameObject {
 		return new Vertex(index);
 	}
 
-	/**
-	 * @return the dimension of grid
-	 */
-	public float getDimension() {
-		return dimension;
+	@Override
+	public Vertex getIndeces() {
+		return new Vertex(index);
 	}
 
 }
