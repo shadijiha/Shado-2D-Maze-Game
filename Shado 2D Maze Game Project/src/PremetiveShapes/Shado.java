@@ -27,6 +27,11 @@ public abstract class Shado {
 			rectangle = new Rectangle2D.Double(x, y, w, h);
 		}
 
+		public Rectangle(final Rectangle other) {
+			rectangle = new Rectangle2D.Double(other.rectangle.x, other.rectangle.y, other.rectangle.width,
+					other.rectangle.height);
+		}
+
 		// Renderer
 		public void draw(Graphics2D graphics) {
 			graphics.setColor(this.fill);
@@ -100,6 +105,11 @@ public abstract class Shado {
 		// Constructors
 		public Circle(double x, double y, double r) {
 			this.ellipse = new Ellipse2D.Double(x, y, r * 2, r * 2);
+		}
+
+		public Circle(final Circle other) {
+			this.ellipse = new Ellipse2D.Double(other.ellipse.x, other.ellipse.y, other.ellipse.width * 2,
+					other.ellipse.height * 2);
 		}
 
 		// Graphics operations

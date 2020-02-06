@@ -20,6 +20,7 @@ public class Bullet extends GameObject {
 	private GameObject source;
 	private Vector velocity;
 	private Shado.Rectangle shape;
+	private boolean active;
 
 	public static List<Bullet> allBullets = new ArrayList<>();
 
@@ -31,6 +32,7 @@ public class Bullet extends GameObject {
 		this.damage = damage;
 		this.source = source;
 		this.velocity = velocity;
+		this.active = true;
 
 		Vertex initPos = source.getIndeces();
 		var d = source.getDimensions();
@@ -78,6 +80,18 @@ public class Bullet extends GameObject {
 	 */
 	public Vector getVelocity() {
 		return velocity;
+	}
+
+	public Shado.Rectangle getShape() {
+		return new Shado.Rectangle(shape);
+	}
+
+	public boolean isActive() {
+		return this.active;
+	}
+
+	public void setActiveTo(boolean status) {
+		this.active = status;
 	}
 
 	/**

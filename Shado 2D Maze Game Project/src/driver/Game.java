@@ -31,16 +31,15 @@ public abstract class Game {
 	}
 
 	public static void shootAllMonsters() {
-		for (var monster : Monster.allMonsters) {
-			monster.shoot();
-		}
+		Monster.allMonsters.parallelStream().forEach(e -> e.shoot());
 	}
 
 	public static void updateAndDrawAllBullets(Graphics2D g) {
-		for (var bullet : Bullet.allBullets) {
-			bullet.update();
-			bullet.draw(g);
-		}
+		// Only draw bullets that are active
+		Bullet.allBullets.parallelStream().filter(e -> e.isActive()).forEachOrdered(e -> {
+			e.update();
+			e.draw(g);
+		});
 	}
 
 	public static boolean canMoveToGrid(Player p, Vertex offset) {

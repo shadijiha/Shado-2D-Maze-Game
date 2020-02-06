@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import PremetiveShapes.Shado;
+import gameObjects.Bullet;
 import gameObjects.Grid;
 
 public class DrawingComponent extends JComponent implements ActionListener, KeyListener {
@@ -79,6 +80,14 @@ public class DrawingComponent extends JComponent implements ActionListener, KeyL
 
 		// Update all bullets
 		Game.updateAndDrawAllBullets(g2);
+
+		// Detected collision
+		Bullet.allBullets.stream().filter(e -> e.isActive()).forEach(b -> {
+			if (b.getShape().collides(Game.player.getShape())) {
+				Game.player.damage(60);
+				b.setActiveTo(false);
+			}
+		});
 
 		// Timer
 		tm.start();

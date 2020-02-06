@@ -16,6 +16,7 @@ public class Player extends GameObject {
 
 	private String name;
 	private Vertex gridPosition;
+	private Shado.Circle shape;
 
 	private int hp = 1200; // Current health
 	private int maxHp = 1000; // Max health
@@ -37,8 +38,9 @@ public class Player extends GameObject {
 		// Get the grid dimensions where player is
 		this.dimensions.width = where.getDimensions().width;
 		this.dimensions.height = where.getDimensions().height;
-		final var shape = new Shado.Circle(gridPosition.x * dimensions.width, gridPosition.y * dimensions.height,
+		this.shape = new Shado.Circle(gridPosition.x * dimensions.width, gridPosition.y * dimensions.height,
 				dimensions.width / 2).setFill(Color.BLUE);
+		;
 		shape.draw(g);
 
 		// DRAW THE HP BAR
@@ -154,6 +156,13 @@ public class Player extends GameObject {
 
 	public Vertex getGridPosition() {
 		return new Vertex(gridPosition);
+	}
+
+	/**
+	 * @return The shape of the calling player
+	 */
+	public Shado.Circle getShape() {
+		return new Shado.Circle(this.shape);
 	}
 
 	/**
