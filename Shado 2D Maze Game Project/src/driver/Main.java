@@ -28,7 +28,7 @@ public abstract class Main {
 				// All the application goes here
 				JFrame mainWindow = new JFrame("Shado Mario Java");
 				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				mainWindow.setPreferredSize(new Dimension(800, 800));
+				mainWindow.setPreferredSize(new Dimension(1200, 675));
 
 				DrawingComponent canvas = new DrawingComponent(mainWindow);
 				mainWindow.add(canvas);

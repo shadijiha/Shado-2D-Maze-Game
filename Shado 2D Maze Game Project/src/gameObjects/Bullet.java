@@ -11,11 +11,9 @@ import java.util.List;
 
 import PremetiveShapes.Shado;
 import ShadoMath.Vector;
-import ShadoMath.Vertex;
 
 public class Bullet extends GameObject {
 
-	private Vertex positionXY;
 	private int damage;
 	private GameObject source;
 	private Vector velocity;
@@ -31,23 +29,21 @@ public class Bullet extends GameObject {
 		this.damage = damage;
 		this.source = source;
 		this.velocity = velocity;
+		this.position = source.getPosition();
 
-		Vertex initPos = source.getIndeces();
-		var d = source.getDimensions();
-		this.positionXY = new Vertex(initPos.x * d.width, initPos.y * d.height);
-		this.shape = new Shado.Rectangle(positionXY.x, positionXY.y, d.width * 0.40, d.height * 0.40)
-				.setFill(Color.ORANGE);
+		Shado.Dimension<Double> d = source.getDimensions();
+		this.dimensions = new Shado.Dimension<Double>(d.width * 0.50, d.height * 0.20);
+		this.shape = new Shado.Rectangle(this.position, this.dimensions).setFill(Color.ORANGE);
 
 		allBullets.add(this);
 	}
 
 	public Bullet(int damage, GameObject source) {
-		this(damage, source, null);
+		this(damage, source, new Vector(0, 0));
 	}
 
 	public void update() {
-		positionXY.x += velocity.x;
-		positionXY.y += velocity.y;
+		this.move(velocity);
 		this.shape.move(velocity);
 	}
 
@@ -67,10 +63,6 @@ public class Bullet extends GameObject {
 	 */
 	public GameObject getSource() {
 		return source;
-	}
-
-	public Vertex getPositionXY() {
-		return new Vertex(positionXY);
 	}
 
 	/**
@@ -99,16 +91,5 @@ public class Bullet extends GameObject {
 	 */
 	public void setVelocity(Vector velocity) {
 		this.velocity = velocity;
-	}
-
-	public void setPositionXY(Vertex newPosition) {
-		this.positionXY.x = newPosition.x;
-		this.positionXY.y = newPosition.y;
-	}
-
-	@Override
-	public Vertex getIndeces() {
-		// TODO Auto-generated method stub
-		return source.getIndeces();
 	}
 }

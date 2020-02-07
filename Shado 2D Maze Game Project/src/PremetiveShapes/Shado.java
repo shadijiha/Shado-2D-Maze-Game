@@ -17,7 +17,17 @@ import ShadoMath.Vertex;
 
 public abstract class Shado {
 
-	public static class Rectangle {
+	public static final Color GREEN = new Color(34, 177, 76);
+	public static final Color LIGHT_BLUE = new Color(153, 217, 234);
+	public static final Color YELLOW = new Color(255, 242, 0);
+
+	public abstract static class Form {
+		public abstract void draw(Graphics2D g);
+
+		public abstract void move(Vector v);
+	}
+
+	public static class Rectangle extends Form {
 		private Rectangle2D.Double rectangle; // Stores shape
 		private Color fill = new Color(255, 255, 255, 255); // Stores color
 		private Color stroke = new Color(0, 0, 0);
@@ -27,7 +37,12 @@ public abstract class Shado {
 			rectangle = new Rectangle2D.Double(x, y, w, h);
 		}
 
+		public Rectangle(Vertex position, Dimension<Double> dimension) {
+			this(position.x, position.y, dimension.width, dimension.height);
+		}
+
 		// Renderer
+		@Override
 		public void draw(Graphics2D graphics) {
 			graphics.setColor(this.fill);
 			graphics.fill(this.rectangle);
@@ -40,6 +55,7 @@ public abstract class Shado {
 			this.rectangle.y += dy;
 		}
 
+		@Override
 		public void move(Vector v) {
 			this.move(v.x, v.y);
 		}
@@ -92,17 +108,26 @@ public abstract class Shado {
 		}
 	}
 
-	public static class Circle {
+	public static class Circle extends Form {
 		private Ellipse2D.Double ellipse; // Stores shape
 		private Color fill = new Color(255, 255, 255, 255); // Stores fill color
 		private Color stroke = Color.BLACK; // Stores stroke color
 
 		// Constructors
+		public Circle(double x, double y, double w, double h) {
+			this.ellipse = new Ellipse2D.Double(x, y, w, h);
+		}
+
 		public Circle(double x, double y, double r) {
 			this.ellipse = new Ellipse2D.Double(x, y, r * 2, r * 2);
 		}
 
+		public Circle(Vertex position, Dimension dimension) {
+			this(position.x, position.y, (double) dimension.width, (double) dimension.height);
+		}
+
 		// Graphics operations
+		@Override
 		public void draw(Graphics2D graphics) {
 			graphics.setColor(this.fill);
 			graphics.fill(this.ellipse);
@@ -115,6 +140,7 @@ public abstract class Shado {
 			this.ellipse.y += dy;
 		}
 
+		@Override
 		public void move(Vector v) {
 			this.move(v.x, v.y);
 		}
@@ -180,7 +206,7 @@ public abstract class Shado {
 		}
 	}
 
-	public static class Line {
+	public static class Line extends Form {
 		private Line2D.Double line; // Stores shape
 		private Color color; // Store color
 		private int strokeWeight = 1;
@@ -189,6 +215,7 @@ public abstract class Shado {
 			this.line = new Line2D.Double(fromX, fromY, toX, toY);
 		}
 
+		@Override
 		public void draw(Graphics2D graphics) {
 			graphics.setColor(this.color);
 			graphics.setStroke(new BasicStroke(this.strokeWeight));
@@ -204,6 +231,7 @@ public abstract class Shado {
 			this.line.y2 += dy;
 		}
 
+		@Override
 		public void move(Vector v) {
 			this.move(v.x, v.y);
 		}
@@ -238,7 +266,7 @@ public abstract class Shado {
 		}
 	}
 
-	public static class Text {
+	public static class Text extends Form {
 
 		private String text;
 		private Font font = new Font("Times new Roman", Font.BOLD, 14);
@@ -262,6 +290,7 @@ public abstract class Shado {
 		}
 
 		// Graphics
+		@Override
 		public void draw(Graphics2D graphics) {
 			graphics.setFont(this.font);
 			graphics.drawString(this.text, (int) vertex.x, (int) vertex.y);
@@ -318,6 +347,13 @@ public abstract class Shado {
 
 		public String getText() {
 			return this.text;
+		}
+
+		@Override
+		public void move(Vector v) {
+			// TODO Auto-generated method stub
+			this.vertex.x += v.x;
+			this.vertex.y += v.y;
 		}
 	}
 

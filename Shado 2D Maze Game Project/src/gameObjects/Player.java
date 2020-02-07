@@ -9,13 +9,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import PremetiveShapes.Shado;
+import ShadoMath.Vector;
 import ShadoMath.Vertex;
-import driver.Game;
 
 public class Player extends GameObject {
 
 	private String name;
-	private Vertex gridPosition;
+	private Shado.Rectangle shape;
 
 	private int hp = 1200; // Current health
 	private int maxHp = 1000; // Max health
@@ -26,30 +26,23 @@ public class Player extends GameObject {
 	/**
 	 * 
 	 */
-	public Player(String playername) {
+	public Player(String playername, final Vertex p) {
 		super("player");
-		name = playername;
-		gridPosition = new Vertex(1, 1);
+		this.name = playername;
+		this.position = new Vertex(p);
+		this.dimensions = new Shado.Dimension<Double>(50.0, 150.0);
+		this.shape = new Shado.Rectangle(position, dimensions).setFill(Color.orange);
 	}
 
-	public void draw(Graphics2D g, Grid where) {
-		// DRAW THE PLAYER
-		// Get the grid dimensions where player is
-		this.dimensions.width = where.getDimensions().width;
-		this.dimensions.height = where.getDimensions().height;
-		final var shape = new Shado.Circle(gridPosition.x * dimensions.width, gridPosition.y * dimensions.height,
-				dimensions.width / 2).setFill(Color.BLUE);
-		shape.draw(g);
+	public void draw(Graphics2D g) {
+		this.shape.draw(g);
+	}
 
-		// DRAW THE HP BAR
-		var barsPosition = new Vertex(shape.getX(), shape.getY());
-		barsPosition.y -= dimensions.width / 2;
-
-		var hpBars = renderHealthBar(barsPosition,
-				new Shado.Dimension<Float>(dimensions.width, dimensions.height * 0.40f));
-		for (Shado.Rectangle bar : hpBars) {
-			bar.draw(g);
-		}
+	@Override
+	public void move(Vector v) {
+		this.position.x += v.x;
+		this.position.y += v.y;
+		this.shape.move(v);
 	}
 
 	/**
@@ -62,59 +55,6 @@ public class Player extends GameObject {
 	public void damage(float amount) {
 		float reduction = armor / (100 + armor);
 		this.hp -= amount * (1 - reduction);
-	}
-
-	/**
-	 * Move player to another grid index
-	 * 
-	 * @param x The grid colone position
-	 * @param y The grid row position
-	 */
-	public void moveTo(int x, int y) {
-		gridPosition.x = x;
-		gridPosition.y = y;
-	}
-
-	/**
-	 * Move player to another grid index
-	 * 
-	 * @param v The new indeces
-	 */
-	public void moveTo(Vertex v) {
-//		if (gridPosition.x >= Game.grid.get(0).size() - 1 || gridPosition.y >= Game.grid.size() - 1
-//				|| gridPosition.x < 1 || gridPosition.y < 1) {
-//			return;
-//		} else {
-//
-//		}
-//
-//		if (Game.canMoveToGrid(this)) {
-//			gridPosition.x = v.x;
-//			gridPosition.y = v.y;
-//		}
-
-	}
-
-	/**
-	 * Move player by a certain index
-	 * 
-	 * @param x The grid colone position to add
-	 * @param y The grid row position to add
-	 */
-	public void moveBy(int x, int y) {
-
-//		if (gridPosition.x + x >= Game.grid.get(0).size() - 1 || gridPosition.y + y >= Game.grid.size() - 1
-//				|| gridPosition.x + x < 1 || gridPosition.y + y < 1) {
-//			return;
-//		} else {
-//
-//		}
-
-		if (Game.canMoveToGrid(this, new Vertex(x, y))) {
-			gridPosition.x += x;
-			gridPosition.y += y;
-		}
-
 	}
 
 	/**
@@ -150,18 +90,5 @@ public class Player extends GameObject {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	public Vertex getGridPosition() {
-		return new Vertex(gridPosition);
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public Vertex getIndeces() {
-		// TODO Auto-generated method stub
-		return new Vertex(gridPosition);
 	}
 }

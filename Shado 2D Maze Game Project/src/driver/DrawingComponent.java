@@ -11,16 +11,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import PremetiveShapes.Shado;
-import gameObjects.Grid;
+import gameObjects.Monster;
 
-public class DrawingComponent extends JComponent implements ActionListener, KeyListener {
+public class DrawingComponent extends JComponent implements ActionListener, KeyListener, Serializable {
 
 	/**
 	 *
@@ -52,29 +52,20 @@ public class DrawingComponent extends JComponent implements ActionListener, KeyL
 		 * ****** DRAW STUFF********
 		 ***************************/
 		if (!HAS_INIT) {
-			Game.generateGrid(this.parentWindow);
+			Game.generateEnviroment(this.parentWindow);
 			HAS_INIT = true;
 		}
 
-		Game.grid.parallelStream().forEachOrdered(e -> {
-			e.parallelStream().forEachOrdered(grid -> {
-				grid.draw(g2);
-
-				if (Main.LOGGER.debugMode()) {
-					new Shado.Text(grid.getIndex().toString(),
-							grid.getIndex().x * grid.getDimensions().width + grid.getDimensions().height / 2,
-							grid.getIndex().y * grid.getDimensions().width + grid.getDimensions().height / 2).draw(g2);
-				}
-			});
-		});
+		// Draw enviroment
+		Game.enviroment.parallelStream().forEachOrdered(e -> e.draw(g2));
+		Monster.allMonsters.parallelStream().forEachOrdered(e -> e.draw(g2));
 
 		// Draw player
-		Grid playerLocation = Game.grid.get((int) Game.player.getIndeces().y).get((int) Game.player.getIndeces().x);
-		Game.player.draw(g2, playerLocation);
+		Game.player.draw(g2);
 
 		// Make the monsters shoot every 90 frames
 		if (totalFrames % 90 == 0) {
-			Game.shootAllMonsters();
+			// Game.shootAllMonsters();
 		}
 
 		// Update all bullets
@@ -110,17 +101,11 @@ public class DrawingComponent extends JComponent implements ActionListener, KeyL
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			Game.player.moveBy(1, 0);
-		} else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
-			Game.player.moveBy(-1, 0);
-		} else if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
-			Game.player.moveBy(0, -1);
-		} else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
-			Game.player.moveBy(0, 1);
+		// Key events
+		var key = e.getKeyCode();
+		if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
+			Game.player.move(new ShadoMath.Vector(5, 0));
 		}
-
 		repaint();
 	}
 

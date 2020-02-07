@@ -8,31 +8,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PremetiveShapes.Shado;
+import ShadoMath.Vector;
 import ShadoMath.Vertex;
 
 public abstract class GameObject {
 
+	protected Vertex position;
 	protected String objectName;
 	protected long id;
-	protected static List<GameObject> allObjects = new ArrayList<GameObject>();
-	protected Shado.Dimension<Float> dimensions;
+	protected Shado.Dimension<Double> dimensions;
+	protected Shado.Form shape;
+
+	public static List<GameObject> allObjects = new ArrayList<GameObject>();
 
 	/**
 	 * 
 	 */
 	protected GameObject(String objectName) {
 		this.objectName = objectName;
-		id = (long) (Math.random() * 1e9);
-		this.dimensions = new Shado.Dimension<Float>();
+		this.id = (long) (Math.random() * Long.MAX_VALUE);
+		this.dimensions = new Shado.Dimension<Double>();
 
 		// Add to all objects
 		allObjects.add(this);
 	}
 
 	/**
-	 * @return Thie position index of the calling object on the grid
+	 * Moves the object by a certain amount
+	 * 
+	 * @param v The amount to move
 	 */
-	public abstract Vertex getIndeces();
+	public void move(final Vector v) {
+		this.position.x += v.x;
+		this.position.y += v.y;
+	}
+
+	/**
+	 * @return The position index of the calling object on the grid
+	 */
+	public Vertex getPosition() {
+		return new Vertex(this.position);
+	}
+
+	/**
+	 * @return Returns the dimensions of the calling object
+	 */
+	public Shado.Dimension<Double> getDimensions() {
+		return new Shado.Dimension<Double>(this.dimensions);
+	}
 
 	/**
 	 * @return The id of the calling object
@@ -46,19 +69,5 @@ public abstract class GameObject {
 	 */
 	public String getObjectName() {
 		return objectName;
-	}
-
-	/**
-	 * @return Returns the dimensions of the calling object
-	 */
-	public Shado.Dimension<Float> getDimensions() {
-		return new Shado.Dimension<Float>(this.dimensions);
-	}
-
-	/**
-	 * @return Returns all the game objects created
-	 */
-	public static List<GameObject> getAllObjects() {
-		return allObjects;
 	}
 }
