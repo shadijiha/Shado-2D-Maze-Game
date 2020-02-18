@@ -36,7 +36,12 @@ public abstract class Main {
 				mainWindow.pack();
 				mainWindow.setLocationRelativeTo(null);
 				mainWindow.setVisible(true);
+
 			}
 		});
+
+		LOGGER.log(new Exception("Debug mode is " + (LOGGER.isDebugMode() ? "on" : "off")));
+		LOGGER.close();
+
 	}
 }

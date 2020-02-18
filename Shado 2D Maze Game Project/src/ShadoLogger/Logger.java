@@ -17,7 +17,7 @@ public class Logger implements AutoCloseable {
 	private boolean debugMode;
 
 	// private List<String> buffer = new ArrayList<String>();
-	private BufferedWriter buffer;
+	private FileWriter buffer;
 
 	public Logger(int _level, boolean overwriteFile) {
 		if (_level < 0 || _level > 2)
@@ -26,7 +26,7 @@ public class Logger implements AutoCloseable {
 		debugMode = true;
 
 		try {
-			buffer = new BufferedWriter(new FileWriter("log.txt", !overwriteFile));
+			buffer = new FileWriter("log.txt", !overwriteFile);
 		} catch (Exception e) {
 			// Handle error
 		}
@@ -51,7 +51,7 @@ public class Logger implements AutoCloseable {
 	}
 
 	// Getter
-	public boolean debugMode() {
+	public boolean isDebugMode() {
 		return debugMode;
 	}
 
